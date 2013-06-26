@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
 <html>
   <head>
@@ -16,9 +16,16 @@
 
 	<div id="layout">
 		<div id="main">
-		<h2>Gerência de Recursos On-Line</h2>
-<p align="center"><img src="img\gerson02.jpg" width="600" height="500"/></p><br>
-		
+<h2>Pessoa Jurídica</h2>
+<p>&nbsp;</p>
+<ul>
+<li><a href="index.jsp?item=7&situacao=2">Cadastrar</a></li>
+<li><a href="index.jsp?item=8&situacao=2">Pesquisar/Alterar</a></li>
+</ul>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>
+<p>&nbsp;</p>			
 </div>
 </div>
   </body>
