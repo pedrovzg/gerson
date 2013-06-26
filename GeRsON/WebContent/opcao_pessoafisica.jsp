@@ -16,16 +16,17 @@
 
 	<div id="layout">
 		<div id="main">
-<h2>Pessoa Jurídica</h2>
+<!-- Itens associados a pessoa Pessoa fisica -->
+<h2>Pessoa Física</h2>
 <p>&nbsp;</p>
 <ul>
-<li><a href="index.jsp?item=7">Cadastrar</a></li>
-<li><a href="index.jsp?item=8">Pesquisar/Alterar</a></li>
+<li><a href="index.jsp?item=3&situacao=2">Cadastrar</a></li>
+<li><a href="index.jsp?item=4&situacao=2">Pesquisar/Alterar</a></li>
 </ul>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
 <p>&nbsp;</p>
-<p>&nbsp;</p>			
+<p>&nbsp;</p>	
 </div>
 </div>
   </body>
