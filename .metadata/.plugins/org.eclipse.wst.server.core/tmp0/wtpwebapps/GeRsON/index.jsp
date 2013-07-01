@@ -1,0 +1,220 @@
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+    pageEncoding="ISO-8859-1"%>
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+    <meta http-equiv="content-language" content="pt-br" />
+    <meta name="description" content="GeRsON - Gerência de Recursos On-line" />
+    <meta name="keywords" content="cadastro de cliente, controle de almoxarifado" />
+    <link rel="stylesheet" type="text/css" href="css/screen.css">
+
+
+   <title>GeRsON</title>
+  </head>
+  <body>
+
+    <div id="layout">
+      
+      <div id="header">
+        
+        <h1 id="logo"><a href="#" title="#">GeRs<span>ON</span></a></h1>
+        <hr class="noscreen" />   
+          
+        <!-- Inicio do Menu de Navegação que será ativo após o login -->  
+        <div id="navigation">
+       
+        <% 
+		//Verificando se existe um resultado para a pesquisa de matricula e senha 
+		if (request.getParameter("situacao") != null) {
+			//Caso exista um resultado (situação), utiliza-se um case para identificar o tipo de menu ou o tipo de mensagem 
+			int situacao = Integer.parseInt(request.getParameter("situacao"));
+			switch(situacao) {
+			case 0:
+			//Situação onde a senha está incorreta
+				%>
+				<p align="right"><font color="red" size=2 ><b>Senha incorreta! Tente novamente!&nbsp;&nbsp;</b></font></p>
+				<%
+			 break;
+			 case 1:
+			//Situação onde o usuário está incorreto
+				 %>
+					<p align="right"><font color="red" size=2 ><b>Usuário incorreto! Tente novamente!&nbsp;&nbsp;</b></font></p>
+					<%
+			 break;
+			 case 2:
+			//Situação onde a matrícula e a senha está correta
+			//Cargo Gerente: cria uma seção para o gerente
+			//Mostra o menu do Gerente
+					String gerente = "gerente";
+			       	session.setAttribute("gerente", gerente);
+					%>		
+					<p align="right"><font color="white">Perfil: Gerente &nbsp;&nbsp;</font></p>
+					<ul>
+					<li><a href="index.jsp?item=0&situacao=2">Início</a></li>
+					<li><a href="index.jsp?item=1&situacao=2">Pessoa Física</a></li>
+          			<li><a href="index.jsp?item=2&situacao=2">Pessoa Jurídica</a></li>
+          			<li><a href="#">Relatórios</a></li><!-- mostra todos os relatorios -->
+          			<li><a href="#">Ponto</a></li>
+          			<li><a href="logoff.jsp">Sair</a></li>
+ 					</ul>
+					<%					
+			 break;
+			 case 3:
+			 //Situação onde a matrícula e a senha está correta
+			 //Cargo diferente de Gerente: cria uma seção para o funcionário
+			 //Mostra o menu do Funcionario
+			     	%>
+					<p align="right"><font color="white">Perfil: Funcionário &nbsp;&nbsp;</font></p>
+					<ul>
+					<li><a href="index.jsp?item=0&situacao=3">Início</a></li>
+       				<li><a href="#">Relatórios</a></li><!-- Folha de Ponto, Contra-Cheque, Horas Extras -->
+       				<!-- mostra apenas relatorios dos funcionários-->
+       				<li><a href="#">Ponto</a></li>
+       				<li><a href="logoff.jsp">Sair</a></li>
+					</ul>
+					<%						
+			 break;
+
+			};
+		}
+		%>
+        </div>
+        
+        <!-- fim do menu de navegação  -->
+        <hr class="noscreen" />  
+    
+      </div>
+      
+<!-- Início do bloco central do sistema -->
+<div id="main">
+
+<!-- Conteúdo do sistema -->
+<% 
+//Verificando se há um item de menu ativo para redirecionar o conteúdo central da página
+if (request.getParameter("item") != null) {
+int item = Integer.parseInt(request.getParameter("item"));
+switch(item)
+
+{
+case 0://inicio
+
+//verificando a situacao para habilitar o login
+	if (request.getParameter("situacao") != null ) {
+		
+		int situacao = Integer.parseInt(request.getParameter("situacao"));		
+		if (situacao==0 || situacao==1) {
+	%>
+<%@ include file="login.jsp" %>
+	
+	<%
+ }
+ }else{
+	 %>
+<%@ include file="login.jsp" %>
+		
+		<%	 
+ }
+ 
+ %>
+ 
+	<%@ include file="main.jsp" %>
+	<%
+break;
+case 1://Opções Pessoa Física
+	%>
+	<%@ include file="opcao_pessoafisica.jsp" %>
+	<%
+break;
+case 2: //Opções Pessoa Jurídica
+	%>
+	<%@ include file="opcao_pessoajuridica.jsp" %>
+	<%
+break;
+case 3: //Cadastrar Pessoa Pessoa Física
+	%>
+	<%@ include file="cadastro_pessoafisica.jsp" %>
+	<%
+break;
+case 4: //Pesquisar/Alterar Pessoa Pessoa Física
+	%>
+	<%@ include file="pesquisa_pessoafisica.jsp" %>
+	<%
+break;
+case 5: //Resultado Cadastro Pessoa Pessoa Física
+	%>
+	<%@ include file="resultado_pessoafisica.jsp" %>
+	<%
+break;
+case 6: //Atualiza Pessoa Pessoa Física
+
+break;
+case 7: //Cadastra Pessoa Jurídica
+	%>
+	<%@ include file="cadastro_pessoajuridica.jsp" %>
+	<%
+break;
+case 8: //Pesquisa Pessoa Jurídica
+	%>
+	<%@ include file="pesquisa_pessoajuridica.jsp" %>
+	<%
+break;
+case 9: //Resultado Cadastro Pessoa Pessoa Juridica
+	%>
+	<%@ include file="resultado_pessoajuridica.jsp" %>
+	<%
+break;
+case 10: //Resultado Cadastro Pessoa Pessoa Juridica
+
+	%>
+	<%@ include file="resultado_pessoajuridica.jsp" %>
+	<%
+break;
+default:
+%>
+<%@ include file="main.jsp" %>
+<%
+};
+} else {//Se não existir opção de menu ativo abre o centro da página - main básico
+	//verificando a situacao para habilitar o formulario de login
+		if (request.getParameter("situacao") != null ) {
+			
+			int situacao = Integer.parseInt(request.getParameter("situacao"));
+			
+			if (situacao==0 || situacao==1) {
+		%>
+		
+<%@ include file="login.jsp" %>
+		
+		<%
+	 }
+	 }else{
+		 %>
+<%@ include file="login.jsp" %>
+			
+			<%	 
+	 }
+	 
+	 %>
+	<%@ include file="main.jsp" %>
+	<%
+};
+
+%>
+</div>
+<!-- Final da Divisão do bloco central do sistema -->
+
+<!--Início da divisão referente ao Rodapé -->
+        <div id="footer">
+        <div id="footer-inside">
+        <p id="copyright">&copy; 2013 - <a href="index.jsp?item=0">GeRsON</a></p>
+        
+               <p >Equipe de Trabalho  | GPP/MDS</p>
+        
+        </div><div style="clear: both;"></div>
+        </div>
+ <!-- Final da Divisão referente ao Rodapé -->
+        </div>
+  </body>
+</html>
