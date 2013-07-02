@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-
+<!DOCTYPE html>
 <html>
   <head>
     <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
@@ -16,16 +15,17 @@
 
 	<div id="layout">
 		<div id="main">
-<h2>Pessoa Física</h2>
-<p>&nbsp;</p>
-<ul>
-<li><a href="index.jsp?item=3">Cadastrar</a></li>
-<li><a href="index.jsp?item=4">Pesquisar/Alterar</a></li>
-</ul>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>
-<p>&nbsp;</p>	
+		<form name="login"	action="ServletController" method="post">
+		<p align="right">
+			Matrícula: <input type="number" step="1" min="1" max="99999999" name="matricula" value="" size="20"	maxlength="8" required />
+			<br>
+			Senha: <input type="password" step="1" min="1" max="99999999" name="senha"	value="" size="12" maxlength="8" required />
+			<br>
+			<input type="hidden" name="logica" value="Login"/>			
+			<input type="submit" value="Acessar"> 
+		</p>
+		</form>
+	<!-- Fim formulário de login e Senha -->
 </div>
 </div>
   </body>
