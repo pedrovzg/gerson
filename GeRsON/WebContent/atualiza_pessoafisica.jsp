@@ -1,19 +1,23 @@
-<% 
-//Busca a sessão aberta
-//Se existir uma sessão e esta sessão for do gerente mostra o conteúdo da página, senão retorna para a página principal
-//String gerente = (String) session.getAttribute("gerente");
-
-if (session.getAttribute("gerente") == null ) {
-	response.sendRedirect("index.jsp?item=0");
-}else{
-%>
-
+<%@page import="java.text.SimpleDateFormat"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="model.funcionarios.pf.*" %>
-<!DOCTYPE html>
+<!DOCTYPE html >
 
 <html>
+	<%
+	if(session.getAttribute("funcionario") == null)
+		response.sendRedirect("index.jsp?item=0");
+	else{
+		
+	
+		PessoaFisica pessoa = (PessoaFisica) session.getAttribute("funcionario");
+		
+		if(!pessoa.getCargo().equalsIgnoreCase("gerente")){
+			response.sendRedirect("index.jsp?situacao=2");
+		}
+	}
+	%>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="content-language" content="pt-br" />
@@ -39,6 +43,8 @@ if (session.getAttribute("gerente") == null ) {
 	<% 
 	int id = Integer.parseInt(request.getParameter("id"));
 	PessoaFisica pessoaFisica = business.idPessoaFisica(id);
+	
+	SimpleDateFormat formataData2 = new SimpleDateFormat("dd/MM/yyyy");
 	%>	
 	
 	<!-- Java Script utilizado para validação dos campos do formulário -->
@@ -192,10 +198,17 @@ if (session.getAttribute("gerente") == null ) {
 					<tr>
 						<td><br> * Nome: <input type="text" name="nome" value="<%= pessoaFisica.getNome() %>"
 							size="65" maxlength="60" required/>
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Data Nascimento: <input
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							<%
+							String dataNascimento = "";
+							
+							if(pessoaFisica.getDataNascimento() != null)
+								dataNascimento = formataData2.format(pessoaFisica.getDataNascimento());
+							%>
+							* Data Nascimento: <input
 							type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="dataNascimento" value="<%= pessoaFisica.getDataNascimento() %>" size="10" maxlength="10" required />
+							name="dataNascimento" value="<%=dataNascimento %>" size="10" maxlength="10" required />
 						</td>
 					</tr>
 
@@ -300,10 +313,18 @@ if (session.getAttribute("gerente") == null ) {
 							max="99999999999" name="RG" value="<%= pessoaFisica.getRG() %>" size="10" maxlength="11"
 							required /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Órgão Emissor: <input
 							type="text" name="orgaoEmissor" value="<%= pessoaFisica.getOrgaoEmissor() %>" size="10" maxlength="15"
-							required /> &nbsp;&nbsp;&nbsp; * Data Expedição: <input
+							required /> &nbsp;&nbsp;&nbsp; 
+							
+							<%
+							String dataExpedicao = "";
+							
+							if(pessoaFisica.getDataExpedicao() != null)
+								dataExpedicao = formataData2.format(pessoaFisica.getDataExpedicao());
+							%>
+							* Data Expedição: <input
 							type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="dataExpedicao" value="<%= pessoaFisica.getDataExpedicao() %>" size="10" maxlength="10" required />
+							name="dataExpedicao" value="<%=dataExpedicao %>" size="10" maxlength="10" required />
 						</td>
 					</tr>
 					<tr>
@@ -346,9 +367,16 @@ if (session.getAttribute("gerente") == null ) {
 						</td>
 					</tr>
 					<tr>
+					
+						<%
+						String dataEmissao = "";
+						
+						if(pessoaFisica.getEmissaoCTPS() != null)
+							dataEmissao = formataData2.format(pessoaFisica.getEmissaoCTPS());
+						%>
 						<td>* Data emissão CTPS: <input type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="emissaoCTPS" value="<%= pessoaFisica.getEmissaoCTPS() %>" size="10" maxlength="10" required />
+							name="emissaoCTPS" value="<%=dataEmissao %>" size="10" maxlength="10" required />
 							&nbsp;&nbsp;&nbsp; PIS:<input type="number" step="1" min="1"
 							max="999999999999999" name="PIS" value="<%= pessoaFisica.getPIS() %>" size="10"
 							maxlength="10" />
@@ -429,29 +457,51 @@ if (session.getAttribute("gerente") == null ) {
 					<tr>
 						<td><br> * Matrícula: <input type="number" step="1"
 							min="1" max="99999999" name="matricula" value="<%= pessoaFisica.getMatricula() %>" size="20"
-							maxlength="8" required /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Senha:
+							maxlength="8" required disabled="disabled"/> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Senha:
 							<input type="text" name="senha"
 							value="<%= pessoaFisica.getSenha() %>" size="15" maxlength="8" required />
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Área: <input type="text"
 							name="area" value="<%= pessoaFisica.getArea() %>" size="40" maxlength="40" required /></td>
 					</tr>
 					<tr>
+					
+						<% 
+						String dataAdmissao = "";
+						
+						if(pessoaFisica.getDataAdmissao() != null)
+							dataAdmissao = formataData2.format(pessoaFisica.getDataAdmissao());
+						%>
 						<td>* Data de Admissão: <input type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="dataAdmissao" value="<%= pessoaFisica.getDataAdmissao() %>" size="10" maxlength="10" required />
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data
-							de Desligamento: <input type="text"
+							name="dataAdmissao" value="<%=dataAdmissao %>" size="10" maxlength="10" required />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+							
+						<% 
+						String dataDeligamento = "";
+						
+						if(pessoaFisica.getDataDesligamento() != null)
+							dataDeligamento = formataData2.format(pessoaFisica.getDataDesligamento());
+						%>
+							Data de Desligamento: <input type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="dataDesligamento" value="<%= pessoaFisica.getDataDesligamento() %>" size="10" maxlength="10" />
+							name="dataDesligamento" value="<%=dataDeligamento %>" size="10" maxlength="10" />
 						</td>
 					</tr>
 					<tr>
 						<td>* Salario: <input type="number" step="0.01" min="678.00"
 							max="25000.00" name="salario" value="<%= pessoaFisica.getSalario() %>" size="20" maxlength="8"
 							required />
+							
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *
-							Cargo: <input type="text" name="cargo" value="<%= pessoaFisica.getCargo() %>" size="40"
-							maxlength="40" required />
+							Cargo: <select name="cargo">
+							<option value="<%=pessoaFisica.getCargo() %>">
+								<%=pessoaFisica.getCargo() %></option>
+							<option value="Atendente">Atendente</option>
+							<option value="Analista Administrativo">Analista Administrativo</option>
+							<option value="Analista Financeiro">Analista Financeiro</option>
+							<option value="Designer Gráfico">Designer Gráfico</option>
+							<option value="Gerente">Gerente</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
@@ -558,7 +608,7 @@ if (session.getAttribute("gerente") == null ) {
 				<input type="hidden" name="logica" value="AtualizaPessoaFisica"/>
 				
 				<input type="submit" value="Atualizar dados">
-				<h3><a href="javascript:window.history.go(-1)">Voltar para a página anterior e escolher outro Funcionário</a></h3>
+				&nbsp;&nbsp;&nbsp;&nbsp;
 				<input type="button" value="Fechar Janela" onclick="window.close()" />
 				<hr>
 			</form>
@@ -566,4 +616,3 @@ if (session.getAttribute("gerente") == null ) {
 	</div></div></div>
 </body>
 </html>
-<% } %>

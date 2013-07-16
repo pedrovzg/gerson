@@ -1,8 +1,22 @@
+<%@page import="model.funcionarios.pf.PessoaFisica"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 
 <html>
+	<%
+	if(session.getAttribute("funcionario") == null)
+		response.sendRedirect("index.jsp?item=0");
+	else{
+		
+	
+		PessoaFisica pessoaFisica = (PessoaFisica) session.getAttribute("funcionario");
+		
+		if(!pessoaFisica.getCargo().equalsIgnoreCase("gerente")){
+			response.sendRedirect("index.jsp?situacao=2");
+		}
+	}
+	%>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="content-language" content="pt-br" />
@@ -24,7 +38,7 @@
 <p>&nbsp;</p>
 <hr>
 <p><a href="index.jsp?item=7">Cadastrar outro Funcionário - Pessoa Física</a></p>
-<p><a href="index.jsp?item=0">Voltar para Página Inicial</a></p>
+<p><a href="index.jsp?situacao=2">Voltar para Página Inicial</a></p>
 <p>&nbsp;</p>
 </body>
 </html>

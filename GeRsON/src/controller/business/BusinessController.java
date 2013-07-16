@@ -2,22 +2,19 @@ package controller.business;
 
 import java.util.List;
 
-import dao.PesquisaDAO;
 import model.funcionarios.pf.PessoaFisica;
+import model.funcionarios.pf.Ponto;
 import model.funcionarios.pj.PessoaJuridica;
+import dao.PesquisaDAO;
 
 public class BusinessController {
 	private List<PessoaFisica> listaPessoasFisicas;
 	private PessoaFisica[] pessoasFisicas = {};
 	private PessoaJuridica[] pessoasJuridicas = {};
-	private String cargo;
-
+	private Ponto[] pontos= {};
+	
 	public BusinessController() {
 
-	}
-
-	public String getCargo() {
-		return cargo;
 	}
 
 	public PessoaFisica[] getPessoasFisicas() {
@@ -26,6 +23,14 @@ public class BusinessController {
 
 	public void setPessoasFisicas(PesquisaDAO pesquisa) {
 		this.pessoasFisicas = pesquisa.getPessoasFisicas();
+	}
+	
+	public Ponto[] getPontos() {
+		return pontos;
+	}
+
+	public void setPontos(PesquisaDAO pesquisa) {
+		this.pontos = pesquisa.getPontos();
 	}
 
 	public PessoaJuridica[] getPessoasJuridicas() {
@@ -55,7 +60,6 @@ public class BusinessController {
 
 		for (PessoaFisica pessoa : listaPessoasFisicas) {
 			if(pessoa.getMatricula().equals(matricula) && pessoa.getSenha().equals(senha)){
-				this.cargo = pessoa.getCargo();
 				return 0;
 			}
 			else if(pessoa.getMatricula().equals(matricula)){
