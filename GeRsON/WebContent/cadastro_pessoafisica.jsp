@@ -1,18 +1,20 @@
-<% 
-//Busca a sessão aberta
-//Se existir uma sessão e esta sessão for do gerente mostra o conteúdo da página, senão retorna para a página principal
-//String gerente = (String) session.getAttribute("gerente");
-
-if (session.getAttribute("gerente") == null ) {
-	response.sendRedirect("index.jsp?item=0");
-}else{
-%>
-
+<%@page import="model.funcionarios.pf.PessoaFisica"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 
 <html>
+	<%
+	if(session.getAttribute("funcionario") == null)
+		response.sendRedirect("index.jsp?item=0");
+	else{
+		PessoaFisica pessoaFisica = (PessoaFisica) session.getAttribute("funcionario");
+		
+		if(!pessoaFisica.getCargo().equalsIgnoreCase("gerente")){
+			response.sendRedirect("index.jsp?situacao=2");
+		}
+	}
+	%>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="content-language" content="pt-br" />
@@ -157,6 +159,13 @@ if (session.getAttribute("gerente") == null ) {
 			<form name="cadastrar_pessoafisica"
 				action="ServletController" method="post">
 				<h2>Cadastro de Funcionário - Pessoa Física</h2>
+				
+				<%
+				if(session.getAttribute("erroMatricula") != null) {
+				%>
+				<h3><%=session.getAttribute("erroMatricula") %></h3>
+				<%} %>
+				
 				<p>
 					Status do Funcionário: <select name="status_2">
 						<option value="True">Ativo</option>
@@ -412,8 +421,13 @@ if (session.getAttribute("gerente") == null ) {
 							max="25000.00" name="salario" value="" size="20" maxlength="8"
 							required />
 							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *
-							Cargo: <input type="text" name="cargo" value="" size="40"
-							maxlength="40" required />
+							Cargo: <select name="cargo">
+							<option value="Atendente">Atendente</option>
+							<option value="Analista Administrativo">Analista Administrativo</option>
+							<option value="Analista Financeiro">Analista Financeiro</option>
+							<option value="Designer Gráfico">Designer Gráfico</option>
+							<option value="Gerente">Gerente</option>
+							</select>
 						</td>
 					</tr>
 					<tr>
@@ -524,4 +538,3 @@ if (session.getAttribute("gerente") == null ) {
 	</div>
 </body>
 </html>
-<% } %>

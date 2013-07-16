@@ -1,19 +1,24 @@
-<% 
-//Busca a sessão aberta
-//Se existir uma sessão e esta sessão for do gerente mostra o conteúdo da página, senão retorna para a página principal
-//String gerente = (String) session.getAttribute("gerente");
-
-if (session.getAttribute("gerente") == null ) {
-	response.sendRedirect("index.jsp?item=0");
-}else{
-%>
-
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="model.funcionarios.pj.PessoaJuridica"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
-<%@ page import="model.funcionarios.pj.*" %>
+<%@ page import="model.funcionarios.pf.*" %>
 <!DOCTYPE html >
 
 <html>
+	<%
+	if(session.getAttribute("funcionario") == null)
+		response.sendRedirect("index.jsp?item=0");
+	else{
+		
+	
+		PessoaFisica pessoa = (PessoaFisica) session.getAttribute("funcionario");
+		
+		if(!pessoa.getCargo().equalsIgnoreCase("gerente")){
+			response.sendRedirect("index.jsp?situacao=2");
+		}
+	}
+	%>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="content-language" content="pt-br" />
@@ -39,6 +44,8 @@ if (session.getAttribute("gerente") == null ) {
 	<% 
 	int id = Integer.parseInt(request.getParameter("id"));
 	PessoaJuridica pessoaJuridica = business.idPessoaJuridica(id);
+	
+	SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");
 	%>
 
 	<!-- Java Script utilizado para validação dos campos do formulário -->
@@ -212,9 +219,7 @@ if (session.getAttribute("gerente") == null ) {
 					<tr>
 						<td><br> * Matrícula: <input type="number" step="1"
 							min="1" max="99999999" name="matricula" value="<%= pessoaJuridica.getMatricula() %>" size="20"
-							maxlength="8" required /> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *
-							Senha: <input type="text" name="senha" 
-							value="<%= pessoaJuridica.getSenha() %>" size="15" maxlength="8" required /></td>
+							maxlength="8" required disabled="disabled"/>
 					</tr>
 					<tr>
 						<td>* Área: <input type="text" name="area" value="<%= pessoaJuridica.getArea() %>" size="40"
@@ -225,13 +230,26 @@ if (session.getAttribute("gerente") == null ) {
 						</td>
 					</tr>
 					<tr>
+					<% 
+					String dataAdmissao = "";
+					
+					if(pessoaJuridica.getDataAdmissao() != null)
+						dataAdmissao = formataData.format(pessoaJuridica.getDataAdmissao());
+					%>
 						<td>* Data de Admissão: <input type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="dataAdmissao" value="<%= pessoaJuridica.getDataAdmissao() %>" size="10" maxlength="10" required />
-							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Data
-							de Desligamento: <input type="text"
+							name="dataAdmissao" value="<%=dataAdmissao %>" size="10" maxlength="10" required />
+							&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+							
+							<%
+							String dataDeligamento = "";
+							
+							if(pessoaJuridica.getDataDesligamento() != null)
+								dataDeligamento = formataData.format(pessoaJuridica.getDataDesligamento());
+							%>
+							Data de Desligamento: <input type="text"
 							onkeypress="return mascaraDATA(event,this); return false;"
-							name="dataDesligamento" value="<%= pessoaJuridica.getDataDesligamento() %>" size="10" maxlength="10" />
+							name="dataDesligamento" value="<%=dataDeligamento %>" size="10" maxlength="10" />
 						</td>
 					</tr>
 					<tr>
@@ -250,9 +268,7 @@ if (session.getAttribute("gerente") == null ) {
 				
 				<input type="hidden" name="logica" value="AtualizaPessoaJuridica"/>
 				
-				<input type="submit" value="Atualizar dados">
-				<h3><a href="javascript:window.history.go(-1)">Voltar para a página anterior e escolher outra Empresa</a></h3>
-				<input type="button" value="Fechar Janela" onclick="window.close()" />
+				<input type="submit" value="Atualizar dados"> &nbsp;&nbsp;&nbsp;&nbsp;<input type="button" value="Fechar Janela" onclick="window.close()" />
 			</form>
 		</div>
 	</div>
@@ -260,4 +276,3 @@ if (session.getAttribute("gerente") == null ) {
 	</div>
 </body>
 </html>
-<% } %>

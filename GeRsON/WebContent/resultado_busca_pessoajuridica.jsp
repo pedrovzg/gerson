@@ -1,9 +1,23 @@
+<%@page import="model.funcionarios.pf.PessoaFisica"%>
 <%@page import="controller.business.BusinessController"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 
 <html>
+	<%
+	if(session.getAttribute("funcionario") == null)
+		response.sendRedirect("index.jsp?item=0");
+	else{
+		
+	
+		PessoaFisica pessoaFisica = (PessoaFisica) session.getAttribute("funcionario");
+		
+		if(!pessoaFisica.getCargo().equalsIgnoreCase("gerente")){
+			response.sendRedirect("index.jsp?situacao=2");
+		}
+	}
+	%>
 <head>
 <meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
 <meta http-equiv="content-language" content="pt-br" />
@@ -32,7 +46,7 @@ BusinessController business = (BusinessController)session.getAttribute("pesquisa
 	</div>
 	<div id="main">
 	
-	<h3>Resultado da Pesquisa - Funcionário: Pessoa Física </h3>
+	<h3>Resultado da Pesquisa - Funcionário: Pessoa Jurídica </h3>
 	
 	<table>
 	<tr>
